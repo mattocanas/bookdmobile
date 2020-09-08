@@ -2,6 +2,7 @@ import React from 'react';
 import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
 import {auth} from '../../firebase/firebase';
 import {useStateProviderValue} from '../../state/StateProvider';
+import Feed from './Feed';
 
 const App = () => {
   const [{currentUser}, dispatch] = useStateProviderValue();
@@ -21,6 +22,7 @@ const App = () => {
       <TouchableOpacity style={{marginTop: 32}} onPress={signoutUser}>
         <Text>Logout</Text>
       </TouchableOpacity>
+      <Feed />
     </View>
   );
 };
@@ -31,6 +33,8 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
+    paddingBottom: 100,
+    paddingTop: 50,
   },
   welcomeText: {
     color: '#55d077',
