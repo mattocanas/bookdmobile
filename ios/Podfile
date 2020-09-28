@@ -1,6 +1,8 @@
 require_relative '../node_modules/react-native/scripts/react_native_pods'
 require_relative '../node_modules/@react-native-community/cli-platform-ios/native_modules'
 pod 'RNVectorIcons', :path => '../node_modules/react-native-vector-icons'
+pod 'RNCAsyncStorage', :path => '../node_modules/@react-native-community/async-storage'
+
 
 
 platform :ios, '10.0'
@@ -9,6 +11,14 @@ target 'bookdmobile' do
   config = use_native_modules!
 
   use_react_native!(:path => config["reactNativePath"])
+
+  pod 'react-native-maps', :path => '../node_modules/react-native-maps'
+
+  pod 'react-native-image-picker', :path => '../node_modules/react-native-image-picker'
+
+  pod 'react-native-image-resizer', :path => '../node_modules/react-native-image-resizer'
+
+  pod 'RNFS', :path => '../node_modules/react-native-fs'
 
   target 'bookdmobileTests' do
     inherit! :complete

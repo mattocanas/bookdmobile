@@ -1,27 +1,11 @@
 import React from 'react';
 import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
-import {auth} from '../../firebase/firebase';
-import {useStateProviderValue} from '../../state/StateProvider';
+
 import Feed from './Feed';
 
 const App = () => {
-  const [{currentUser}, dispatch] = useStateProviderValue();
-  const signoutUser = () => {
-    dispatch({
-      type: 'SET_USER',
-      currentUser: null,
-    });
-    auth.signOut();
-  };
-
   return (
     <View style={styles.container}>
-      <Text style={styles.welcomeText}>
-        Welcome to bookd {currentUser ? currentUser.displayName : ''}
-      </Text>
-      <TouchableOpacity style={{marginTop: 32}} onPress={signoutUser}>
-        <Text>Logout</Text>
-      </TouchableOpacity>
       <Feed />
     </View>
   );

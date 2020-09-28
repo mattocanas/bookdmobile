@@ -1,6 +1,8 @@
 export const initialState = {
   currentUser: null,
   usersCurrentLocation: '',
+  usersCurrentBrainstorm: null,
+  currentUserPictureURI: '',
 };
 
 const reducer = (state, action) => {
@@ -14,6 +16,16 @@ const reducer = (state, action) => {
       return {
         ...state,
         usersCurrentLocation: action.usersCurrentLocation,
+      };
+    case 'SET_USERSCURRENTBRAINSTORM':
+      return {
+        ...state,
+        usersCurrentBrainstorm: action.usersCurrentBrainstorm,
+      };
+    case 'SET_CURRENTUSERPICTUREURI':
+      return {
+        ...state,
+        currentUserPictureURI: action.currentUserPictureURI,
       };
     default:
       return state;
