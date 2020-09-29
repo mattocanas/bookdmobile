@@ -21,6 +21,7 @@ import BrainstormCreate from './src/screens/BrainstormCreate';
 import CurrentMeetings from './src/screens/CurrentMeetings';
 import MapScreen from './src/screens/MapScreen';
 import PeopleThereList from './src/screens/PeopleThereList';
+import UserDetailScreen from './src/screens/UserDetailScreen';
 
 const Tabs = createMaterialBottomTabNavigator();
 
@@ -153,6 +154,22 @@ function MyMainStack() {
           },
         }}
         component={PeopleThereList}
+      />
+      <MainStack.Screen
+        name="UserDetailScreen"
+        options={{
+          headerStyle: {
+            backgroundColor: '#222831',
+          },
+          headerTitleStyle: {
+            color: '#c1c8d4',
+          },
+          headerBackTitleStyle: {
+            color: '#c1c8d4',
+            fontSize: 14,
+          },
+        }}
+        component={UserDetailScreen}
       />
     </MainStack.Navigator>
   );

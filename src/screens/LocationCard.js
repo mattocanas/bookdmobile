@@ -65,9 +65,16 @@ const LocationCard = ({
         peopleThere: firebase.firestore.FieldValue.arrayUnion(
           currentUser.displayName,
         ),
-        peopleTherePictures: firebase.firestore.FieldValue.arrayUnion(
-          currentUserPictureURI,
-        ),
+      });
+
+    db.collection('locations')
+      .doc(docName)
+      .collection('peopleThere')
+      .doc(currentUser.uid)
+      .set({
+        username: currentUser.displayName,
+        uid: currentUser.uid,
+        profilePictureUrl: currentUserPictureURI,
       });
 
     db.collection('users')
@@ -90,10 +97,14 @@ const LocationCard = ({
         peopleThere: firebase.firestore.FieldValue.arrayRemove(
           currentUser.displayName,
         ),
-        peopleTherePictures: firebase.firestore.FieldValue.arrayRemove(
-          currentUserPictureURI,
-        ),
       });
+
+    db.collection('locations')
+      .doc(docName)
+      .collection('peopleThere')
+      .doc(currentUser.uid)
+      .delete();
+
     db.collection('users')
       .doc(currentUser.uid)
       .update({

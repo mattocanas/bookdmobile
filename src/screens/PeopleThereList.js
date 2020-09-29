@@ -1,5 +1,16 @@
-import React from 'react';
-import {View, Text, StyleSheet, FlatList, Image} from 'react-native';
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, {useEffect, useState} from 'react';
+import {
+  View,
+  Text,
+  StyleSheet,
+  FlatList,
+  Image,
+  TouchableOpacity,
+} from 'react-native';
+import {set} from 'react-native-reanimated';
+import {db} from '../../firebase/firebase';
+import {useNavigation} from '@react-navigation/native';
 
 const PeopleThereList = ({route, navigation}) => {
   const {
@@ -14,23 +25,38 @@ const PeopleThereList = ({route, navigation}) => {
     peopleTherePictures,
   } = route.params;
 
+  const [userInfo, setUserInfo] = useState('');
+  const navigationUse = useNavigation();
+
+  useEffect(() => {
+    db.collection('locations')
+      .doc(docName)
+      .collection('peopleThere')
+      .onSnapshot((snapshot) =>
+        setUserInfo(snapshot.docs.map((doc) => doc.data())),
+      );
+  }, []);
+
   return (
     <View style={styles.container}>
       <FlatList
-        data={peopleTherePictures}
-        keyExtractor={(item) => item}
+        data={userInfo}
+        keyExtractor={(item) => item.uid}
         renderItem={({item}) => (
           <View>
-            <Image style={styles.profilePicture} source={{uri: item}} />
-          </View>
-        )}
-      />
-      <FlatList
-        data={peopleThere}
-        keyExtractor={(item) => item}
-        renderItem={({item}) => (
-          <View style={styles.userCard}>
-            <Text style={styles.nameText}>{item}</Text>
+            <TouchableOpacity
+              style={styles.userCard}
+              onPress={() =>
+                navigationUse.navigate('UserDetailScreen', {
+                  userId: item.uid,
+                })
+              }>
+              <Image
+                style={styles.profilePicture}
+                source={{uri: item.profilePictureUrl}}
+              />
+              <Text style={styles.nameText}>{item.username}</Text>
+            </TouchableOpacity>
           </View>
         )}
       />
@@ -42,7 +68,6 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: '#222831',
     flex: 1,
-    flexDirection: 'row',
     paddingTop: 20,
     paddingLeft: 6,
     paddingRight: 6,
