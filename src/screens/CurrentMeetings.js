@@ -16,9 +16,9 @@ const CurrentMeetings = ({route}) => {
   const [brainstorms, setBrainstorms] = useState([]);
 
   useEffect(() => {
-    db.collection('locations')
+    db.collection('Austin')
       .doc(docName)
-      .collection('currentBrainstorms')
+      .collection('currentMeetings')
       .onSnapshot((snapshot) =>
         setBrainstorms(snapshot.docs.map((doc) => doc.data())),
       );

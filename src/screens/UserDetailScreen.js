@@ -1,28 +1,64 @@
 import React, {useEffect, useState} from 'react';
-import {View, Text, Image, StyleSheet} from 'react-native';
+import {View, Text, Image, StyleSheet, TouchableOpacity} from 'react-native';
 import {db} from '../../firebase/firebase';
+import {useStateProviderValue} from '../../state/StateProvider';
+import firebase from 'firebase';
+import {set} from 'react-native-reanimated';
 
 function UserDetailScreen({route, navigation}) {
   const {userId} = route.params;
+  const [{currentUser, currentUserData}, dispatch] = useStateProviderValue();
 
   const [userInfo, setUserInfo] = useState('');
+  const [checkIfFollowing, setCheckIfFollowing] = useState(false);
+  const [followingList, setFollowingList] = useState('');
 
   useEffect(() => {
-    db.collection('users')
-      .doc(userId)
-      .get()
-      .then((doc) => setUserInfo(doc.data()));
-  }, [userId]);
+    if (currentUser) {
+      db.collection('users')
+        .doc(userId)
+        .get()
+        .then((doc) => setUserInfo(doc.data()));
+    }
 
-  return (
-    <View style={styles.container}>
-      <Image
-        style={styles.profilePicture}
-        source={{uri: userInfo.profilePictureUrl}}
-      />
-      <Text style={styles.usernameText}>{userInfo.username}</Text>
-    </View>
-  );
+    if (currentUserData.followingList.includes(userId)) {
+      setCheckIfFollowing(true);
+    }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const onFollowPressed = () => {
+    db.collection('users')
+      .doc(currentUser.uid)
+      .update({
+        followingList: firebase.firestore.FieldValue.arrayUnion(userInfo.uid),
+      });
+    setCheckIfFollowing(true);
+  };
+
+  if (currentUser) {
+    return (
+      <View style={styles.container}>
+        <Image
+          style={styles.profilePicture}
+          source={{uri: userInfo.profilePictureUrl}}
+        />
+        <Text style={styles.usernameText}>{userInfo.username}</Text>
+        {checkIfFollowing === false ? (
+          <TouchableOpacity
+            style={styles.followButton}
+            onPress={onFollowPressed}>
+            <Text style={styles.followText}>Follow</Text>
+          </TouchableOpacity>
+        ) : (
+          <TouchableOpacity style={styles.followButton}>
+            <Text style={styles.followText}>Unfollow</Text>
+          </TouchableOpacity>
+        )}
+      </View>
+    );
+  }
 }
 
 const styles = StyleSheet.create({
@@ -47,6 +83,21 @@ const styles = StyleSheet.create({
   },
   editProfilePicture: {
     marginTop: 140,
+  },
+  followButton: {
+    backgroundColor: '#55d077',
+    borderRadius: 16,
+    marginTop: 10,
+    marginBottom: 10,
+  },
+  followText: {
+    fontSize: 18,
+    fontWeight: '500',
+    color: '#222831',
+    paddingTop: 3,
+    paddingRight: 10,
+    paddingLeft: 10,
+    paddingBottom: 3,
   },
 });
 

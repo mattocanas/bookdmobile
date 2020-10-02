@@ -8,10 +8,12 @@ import Profile from './src/screens/Profile';
 import LocationDetailScreen from './src/screens/LocationDetailScreen';
 import {createMaterialBottomTabNavigator} from '@react-navigation/material-bottom-tabs';
 import React from 'react';
+import {Image, StyleSheet} from 'react-native';
 import {StateProvider} from './state/StateProvider';
 import reducer, {initialState} from './state/reducer';
 import {NavigationContainer} from '@react-navigation/native';
 import {color} from 'react-native-reanimated';
+import Logo from './static/Logo2.png';
 
 import AntIcons from 'react-native-vector-icons/AntDesign';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -22,6 +24,8 @@ import CurrentMeetings from './src/screens/CurrentMeetings';
 import MapScreen from './src/screens/MapScreen';
 import PeopleThereList from './src/screens/PeopleThereList';
 import UserDetailScreen from './src/screens/UserDetailScreen';
+import SearchScreen from './src/screens/SearchScreen';
+import FollowingListScreen from './src/screens/FollowingListScreen';
 
 const Tabs = createMaterialBottomTabNavigator();
 
@@ -52,7 +56,7 @@ function MyBottomTabs() {
           ),
         }}
         name="Search"
-        component={HomeScreen}
+        component={SearchScreen}
       />
       <Tabs.Screen
         options={{
@@ -85,20 +89,33 @@ function MyMainStack() {
   return (
     <MainStack.Navigator>
       <MainStack.Screen
-        options={{headerShown: false}}
-        name="Tabs"
+        options={{
+          headerShown: true,
+          headerStyle: {
+            backgroundColor: '#272c36',
+            shadowColor: 'transparent',
+          },
+          headerTitleStyle: {
+            color: '#c1c8d4',
+            fontSize: 22,
+          },
+        }}
+        name="book'd"
         component={MyBottomTabs}
       />
       <MainStack.Screen
         name="LocationDetail"
         options={{
           headerStyle: {
-            backgroundColor: '#222831',
-            borderBottomWidth: 0,
+            backgroundColor: '#272c36',
+            shadowColor: 'transparent',
           },
           headerTitleStyle: {
             color: '#c1c8d4',
           },
+          headerTintColor: '#c1c8d4',
+          title: "book'd",
+          headerBackTitleVisible: false,
         }}
         component={LocationDetailScreen}
       />
@@ -106,11 +123,15 @@ function MyMainStack() {
         name="BrainstormCreate"
         options={{
           headerStyle: {
-            backgroundColor: '#222831',
+            backgroundColor: '#272c36',
+            shadowColor: 'transparent',
           },
           headerTitleStyle: {
             color: '#c1c8d4',
           },
+          headerTintColor: '#c1c8d4',
+          title: 'Create a meeting',
+          headerBackTitleVisible: false,
         }}
         component={BrainstormCreate}
       />
@@ -118,11 +139,15 @@ function MyMainStack() {
         name="CurrentMeetings"
         options={{
           headerStyle: {
-            backgroundColor: '#222831',
+            backgroundColor: '#272c36',
+            shadowColor: 'transparent',
           },
           headerTitleStyle: {
             color: '#c1c8d4',
           },
+          headerTintColor: '#c1c8d4',
+          title: 'Current meetings',
+          headerBackTitleVisible: false,
         }}
         component={CurrentMeetings}
       />
@@ -130,12 +155,15 @@ function MyMainStack() {
         name="MapScreen"
         options={{
           headerStyle: {
-            backgroundColor: '#222831',
-            borderBottomWidth: 0,
+            backgroundColor: '#272c36',
+            shadowColor: 'transparent',
           },
           headerTitleStyle: {
             color: '#c1c8d4',
           },
+          headerTintColor: '#c1c8d4',
+          title: "book'd",
+          headerBackTitleVisible: false,
         }}
         component={MapScreen}
       />
@@ -143,15 +171,18 @@ function MyMainStack() {
         name="PeopleThereList"
         options={{
           headerStyle: {
-            backgroundColor: '#222831',
+            backgroundColor: '#272c36',
+            shadowColor: 'transparent',
           },
           headerTitleStyle: {
             color: '#c1c8d4',
           },
           headerBackTitleStyle: {
             color: '#c1c8d4',
-            fontSize: 14,
           },
+          headerTintColor: '#c1c8d4',
+          title: "book'd",
+          headerBackTitleVisible: false,
         }}
         component={PeopleThereList}
       />
@@ -159,7 +190,8 @@ function MyMainStack() {
         name="UserDetailScreen"
         options={{
           headerStyle: {
-            backgroundColor: '#222831',
+            backgroundColor: '#272c36',
+            shadowColor: 'transparent',
           },
           headerTitleStyle: {
             color: '#c1c8d4',
@@ -168,8 +200,30 @@ function MyMainStack() {
             color: '#c1c8d4',
             fontSize: 14,
           },
+          title: "book'd",
+          headerBackTitleVisible: false,
         }}
         component={UserDetailScreen}
+      />
+
+      <MainStack.Screen
+        name="FollowingListScreen"
+        options={{
+          headerStyle: {
+            backgroundColor: '#272c36',
+            shadowColor: 'transparent',
+          },
+          headerTitleStyle: {
+            color: '#c1c8d4',
+          },
+          headerBackTitleStyle: {
+            color: '#c1c8d4',
+            fontSize: 14,
+          },
+          title: "book'd",
+          headerBackTitleVisible: false,
+        }}
+        component={FollowingListScreen}
       />
     </MainStack.Navigator>
   );
@@ -191,6 +245,7 @@ function MyAuthStack() {
             color: '#c1c8d4',
           },
         }}
+        tabBarLabel="book'd"
         component={SigninScreen}
       />
       <AuthStack.Screen
@@ -204,6 +259,7 @@ function MyAuthStack() {
             color: '#c1c8d4',
           },
         }}
+        tabBarLabel="book'd"
         component={SignupScreen}
       />
     </AuthStack.Navigator>

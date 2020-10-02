@@ -3,6 +3,7 @@ export const initialState = {
   usersCurrentLocation: '',
   usersCurrentBrainstorm: null,
   currentUserPictureURI: '',
+  cuurentUserData: null,
 };
 
 const reducer = (state, action) => {
@@ -26,6 +27,11 @@ const reducer = (state, action) => {
       return {
         ...state,
         currentUserPictureURI: action.currentUserPictureURI,
+      };
+    case 'GET_CURRENTUSERDATA':
+      return {
+        ...state,
+        currentUserData: action.currentUserData,
       };
     default:
       return state;

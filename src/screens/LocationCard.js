@@ -1,12 +1,5 @@
-import React, {useEffect} from 'react';
-import {
-  Text,
-  View,
-  StyleSheet,
-  Image,
-  TouchableOpacity,
-  Button,
-} from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {Text, View, StyleSheet, Image, TouchableOpacity} from 'react-native';
 import {useStateProviderValue} from '../../state/StateProvider';
 import {db} from '../../firebase/firebase';
 import firebase from 'firebase';
@@ -25,23 +18,17 @@ const LocationCard = ({
   currentBrainstorms,
   peopleTherePictures,
 }) => {
+  const [currentUserInfo, setCurrentUserInfo] = useState('');
   useEffect(() => {
-    const getData = async () => {
-      try {
-        const value = await AsyncStorage.getItem('usersCurrentLocation');
-        if (value !== null) {
-          // value previously stored
-          dispatch({
-            type: 'SET_USERSCURRENTLOCATION',
-            usersCurrentLocation: value,
-          });
-        }
-      } catch (e) {
-        // error reading value
-      }
-    };
-    getData();
-  }, [dispatch]);
+    db.collection('users')
+      .doc(currentUser.uid)
+      .get()
+      .then((doc) => {
+        setCurrentUserInfo(doc.data());
+      });
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentUserInfo]);
 
   const setCurrentLocation = async (value) => {
     try {
@@ -59,7 +46,7 @@ const LocationCard = ({
 
   const onCheckinTapped = () => {
     setCurrentLocation(docName);
-    db.collection('locations')
+    db.collection('Austin')
       .doc(docName)
       .update({
         peopleThere: firebase.firestore.FieldValue.arrayUnion(
@@ -67,7 +54,7 @@ const LocationCard = ({
         ),
       });
 
-    db.collection('locations')
+    db.collection('Austin')
       .doc(docName)
       .collection('peopleThere')
       .doc(currentUser.uid)
@@ -91,7 +78,7 @@ const LocationCard = ({
   };
 
   const onCheckOutTapped = () => {
-    db.collection('locations')
+    db.collection('Austin')
       .doc(docName)
       .update({
         peopleThere: firebase.firestore.FieldValue.arrayRemove(
@@ -99,7 +86,7 @@ const LocationCard = ({
         ),
       });
 
-    db.collection('locations')
+    db.collection('Austin')
       .doc(docName)
       .collection('peopleThere')
       .doc(currentUser.uid)
@@ -152,7 +139,7 @@ const LocationCard = ({
         </Text>{' '}
         user{peopleThere.length > 1 ? 's are' : ' is'} currently book'd!
       </Text>
-      {usersCurrentLocation === '' ? (
+      {currentUserInfo.currentLocation === '' ? (
         <TouchableOpacity
           onPress={onCheckinTapped}
           style={styles.checkinButton}>
@@ -162,9 +149,7 @@ const LocationCard = ({
         <TouchableOpacity
           onPress={onCheckOutTapped}
           style={styles.checkinButton}>
-          <Text style={styles.checkinText}>
-            Check out of your current location
-          </Text>
+          <Text style={styles.checkoutText}>Checkout</Text>
         </TouchableOpacity>
       )}
     </View>
@@ -183,15 +168,26 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginRight: 4,
     marginLeft: 4,
+    marginBottom: 12,
   },
   title: {
-    fontSize: 20,
+    fontSize: 22,
     color: '#c1c8d4',
-    marginTop: 5,
+    marginTop: 10,
   },
 
   checkinText: {
     fontSize: 18,
+    fontWeight: '500',
+    color: '#222831',
+    paddingTop: 3,
+    paddingRight: 10,
+    paddingLeft: 10,
+    paddingBottom: 3,
+  },
+  checkoutText: {
+    fontSize: 18,
+    fontWeight: '500',
     color: '#222831',
     paddingTop: 3,
     paddingRight: 10,
@@ -199,18 +195,19 @@ const styles = StyleSheet.create({
     paddingBottom: 3,
   },
   currentPeople: {
-    fontSize: 14,
+    fontSize: 17,
     color: '#c1c8d4',
     marginTop: 2,
     marginBottom: 3,
   },
   currentPeopleNumber: {
-    fontSize: 14,
+    fontWeight: 'bold',
+    fontSize: 18,
     color: '#55d077',
   },
   checkinButton: {
     backgroundColor: '#55d077',
-    borderRadius: 8,
+    borderRadius: 16,
     marginTop: 10,
     marginBottom: 10,
   },

@@ -8,7 +8,7 @@ import {
 } from 'react-native';
 import {auth} from '../../firebase/firebase';
 
-const App = () => {
+const App = ({navigation}) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState(null);
@@ -54,7 +54,9 @@ const App = () => {
         <Text style={{color: '#FFF', fontWeight: '500'}}>Sign in</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity style={{alignSelf: 'center', marginTop: 32}}>
+      <TouchableOpacity
+        onPress={() => navigation.navigate('Signup')}
+        style={{alignSelf: 'center', marginTop: 32}}>
         <Text style={{color: '#c1c8d4', fontSize: 13}}>
           New to bookd?{' '}
           <Text style={{color: '#55d077', fontWeight: '500'}}>

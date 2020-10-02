@@ -45,9 +45,9 @@ const BrainstormCreate = ({route}) => {
       })
       .then(
         db
-          .collection('locations')
+          .collection('Austin')
           .doc(docName)
-          .collection('currentBrainstorms')
+          .collection('currentMeetings')
           .doc(currentUser.displayName)
           .set({
             name: brainstormName,

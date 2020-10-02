@@ -1,21 +1,15 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, {useState, useEffect} from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  TouchableOpacity,
-  Image,
-  Platform,
-} from 'react-native';
+import {View, Text, StyleSheet, TouchableOpacity, Image} from 'react-native';
 import {auth} from '../../firebase/firebase';
 import {useStateProviderValue} from '../../state/StateProvider';
 import {storage} from '../../firebase/firebase';
 import PhotoUpload from 'react-native-photo-upload';
 import {db} from '../../firebase/firebase';
 import ImagePicker from 'react-native-image-picker';
+import {useNavigation} from '@react-navigation/native';
 
-const Profile = () => {
+const Profile = ({navigation}) => {
   useEffect(() => {
     db.collection('users')
       .doc(currentUser.uid)
@@ -33,6 +27,8 @@ const Profile = () => {
     dispatch,
   ] = useStateProviderValue();
   let url;
+
+  const navigationUse = useNavigation();
 
   const signoutUser = () => {
     dispatch({
@@ -103,17 +99,29 @@ const Profile = () => {
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity style={styles.editProfilePicture} onPress={changeImage}>
-        <Image
-          style={styles.profilePicture}
-          source={{uri: currentUserPictureURI}}
-        />
-      </TouchableOpacity>
+      {currentUser ? (
+        <>
+          <TouchableOpacity
+            style={styles.editProfilePicture}
+            onPress={changeImage}>
+            <Image
+              style={styles.profilePicture}
+              source={{uri: currentUserPictureURI}}
+            />
+          </TouchableOpacity>
 
-      <Text style={styles.usernameText}>{currentUser.displayName}</Text>
-      <TouchableOpacity style={{marginTop: 32}} onPress={signoutUser}>
-        <Text>Logout</Text>
-      </TouchableOpacity>
+          <Text style={styles.usernameText}>{currentUser.displayName}</Text>
+
+          <TouchableOpacity
+            onPress={() => navigation.navigate('FollowingListScreen')}
+            style={styles.followingButton}>
+            <Text style={styles.followingText}>Following</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={{marginTop: 32}} onPress={signoutUser}>
+            <Text>Logout</Text>
+          </TouchableOpacity>
+        </>
+      ) : null}
     </View>
   );
 };
@@ -139,6 +147,21 @@ const styles = StyleSheet.create({
   },
   editProfilePicture: {
     marginTop: 140,
+  },
+  followingButton: {
+    backgroundColor: '#55d077',
+    borderRadius: 16,
+    marginTop: 10,
+    marginBottom: 10,
+  },
+  followingText: {
+    fontSize: 18,
+    fontWeight: '500',
+    color: '#222831',
+    paddingTop: 3,
+    paddingRight: 10,
+    paddingLeft: 10,
+    paddingBottom: 3,
   },
 });
 

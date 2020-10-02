@@ -29,7 +29,7 @@ const PeopleThereList = ({route, navigation}) => {
   const navigationUse = useNavigation();
 
   useEffect(() => {
-    db.collection('locations')
+    db.collection('Austin')
       .doc(docName)
       .collection('peopleThere')
       .onSnapshot((snapshot) =>

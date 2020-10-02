@@ -34,6 +34,7 @@ const LocationDetailScreen = ({route, navigation}) => {
       <Text style={styles.name}>{name}</Text>
       <Text style={styles.address}>{address}</Text>
       <Text style={styles.rating}>5 Stars</Text>
+
       {peopleThere.length >= maxOccupancy ? (
         <TouchableOpacity style={styles.fullWarning}>
           <Text>Currently Full</Text>
@@ -45,6 +46,7 @@ const LocationDetailScreen = ({route, navigation}) => {
         </Text>{' '}
         user{peopleThere.length > 1 ? 's are' : ' is'} currently book'd!
       </Text>
+
       <View style={styles.tabBarView}>
         <Ion
           style={styles.tabBarIcon}

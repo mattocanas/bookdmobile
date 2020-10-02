@@ -15,9 +15,6 @@ const MapScreen = ({route}) => {
   } = route.params;
   return (
     <>
-      <View style={styles.container}>
-        <Text style={styles.header}>The Map Below Will Guide You</Text>
-      </View>
       <MapView
         style={styles.map}
         region={{
@@ -29,6 +26,9 @@ const MapScreen = ({route}) => {
         showsUserLocation={true}>
         <Marker coordinate={{latitude: 30.288496, longitude: -97.735578}} />
       </MapView>
+      <View style={styles.container}>
+        <Text style={styles.header}>The map aabove will guide you...</Text>
+      </View>
     </>
   );
 };
@@ -40,6 +40,7 @@ const styles = StyleSheet.create({
     paddingTop: 20,
     paddingLeft: 6,
     paddingRight: 6,
+    flex: 1,
   },
   header: {
     color: '#55d077',
@@ -47,7 +48,7 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   map: {
-    flex: 1,
+    height: 400,
   },
 });
 
