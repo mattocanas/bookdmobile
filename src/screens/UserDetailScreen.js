@@ -11,7 +11,6 @@ function UserDetailScreen({route, navigation}) {
 
   const [userInfo, setUserInfo] = useState('');
   const [checkIfFollowing, setCheckIfFollowing] = useState(false);
-  const [followingList, setFollowingList] = useState('');
 
   useEffect(() => {
     if (currentUser) {
@@ -21,20 +20,45 @@ function UserDetailScreen({route, navigation}) {
         .then((doc) => setUserInfo(doc.data()));
     }
 
-    if (currentUserData.followingList.includes(userId)) {
+    if (currentUserData.followingIdList.includes(userId)) {
       setCheckIfFollowing(true);
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [checkIfFollowing, currentUserData]);
 
   const onFollowPressed = () => {
     db.collection('users')
       .doc(currentUser.uid)
       .update({
-        followingList: firebase.firestore.FieldValue.arrayUnion(userInfo.uid),
+        followingList: firebase.firestore.FieldValue.arrayUnion({
+          uid: userInfo.uid,
+          username: userInfo.username,
+          name: userInfo.name,
+          bio: userInfo.bio,
+          profilePictureUrl: userInfo.profilePictureUrl,
+        }),
+        followingIdList: firebase.firestore.FieldValue.arrayUnion(userInfo.uid),
       });
     setCheckIfFollowing(true);
+  };
+
+  const onUnfollowPressed = () => {
+    db.collection('users')
+      .doc(currentUser.uid)
+      .update({
+        followingList: firebase.firestore.FieldValue.arrayRemove({
+          uid: userInfo.uid,
+          username: userInfo.username,
+          name: userInfo.name,
+          bio: userInfo.bio,
+          profilePictureUrl: userInfo.profilePictureUrl,
+        }),
+        followingIdList: firebase.firestore.FieldValue.arrayRemove(
+          userInfo.uid,
+        ),
+      });
+    setCheckIfFollowing(false);
   };
 
   if (currentUser) {
@@ -52,7 +76,9 @@ function UserDetailScreen({route, navigation}) {
             <Text style={styles.followText}>Follow</Text>
           </TouchableOpacity>
         ) : (
-          <TouchableOpacity style={styles.followButton}>
+          <TouchableOpacity
+            onPress={onUnfollowPressed}
+            style={styles.followButton}>
             <Text style={styles.followText}>Unfollow</Text>
           </TouchableOpacity>
         )}

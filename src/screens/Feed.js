@@ -6,17 +6,24 @@ import {useStateProviderValue} from '../../state/StateProvider';
 
 const Feed = () => {
   const [
-    {currentUser, currentUserPictureURI},
+    {currentUser, currentUserPictureURI, currentUserData},
     dispatch,
   ] = useStateProviderValue();
   const [locations, setLocations] = useState([]);
   useEffect(() => {
-    db.collection('Austin').onSnapshot((snapshot) =>
-      setLocations(snapshot.docs.map((doc) => doc.data())),
-    );
+    let active = true;
+    if (active) {
+      db.collection('Austin').onSnapshot((snapshot) =>
+        setLocations(snapshot.docs.map((doc) => doc.data())),
+      );
+    }
+    return () => {
+      active = false;
+    };
   }, []);
   useEffect(() => {
-    if (currentUser) {
+    let active = true;
+    if (currentUser & active) {
       db.collection('users')
         .doc(currentUser.uid)
         .get()
@@ -32,6 +39,9 @@ const Feed = () => {
           });
         });
     }
+    return () => {
+      active = false;
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentUser.uid, dispatch]);
 

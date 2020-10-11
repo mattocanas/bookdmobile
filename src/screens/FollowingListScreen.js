@@ -1,20 +1,48 @@
-import React, {useState, useEffect} from 'react';
-import {View, Text, StyleSheet, TouchableOpacity, FlatList} from 'react-native';
+import React, {useState, useEffect, useRef} from 'react';
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  FlatList,
+  Image,
+} from 'react-native';
 import {db} from '../../firebase/firebase';
 import {useStateProviderValue} from '../../state/StateProvider';
+import {useNavigation} from '@react-navigation/native';
 
 function FollowingListScreen() {
   const [
     {currentUser, currentUserData, currentUserPictureURI},
     dispatch,
   ] = useStateProviderValue();
-  const [usersFollowingList, setFollowingList] = useState('');
+  const [usersFollowingList, setFollowingList] = useState([]);
+  const navigationUse = useNavigation();
 
-  useEffect(() => {}, []);
+  useEffect(() => {
+    setFollowingList(currentUserData.followingList);
+
+    // console.log(usersFollowingList);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <View style={styles.container}>
-      <Text>Following list!</Text>
+      <FlatList
+        data={usersFollowingList}
+        keyExtractor={(item) => item.uid}
+        renderItem={({item}) => (
+          <View>
+            <TouchableOpacity style={styles.userCard}>
+              <Image
+                style={styles.profilePicture}
+                source={{uri: item.profilePictureUrl}}
+              />
+              <Text style={styles.nameText}>{item.username}</Text>
+            </TouchableOpacity>
+          </View>
+        )}
+      />
     </View>
   );
 }
